@@ -1,19 +1,35 @@
-public class Magazine extends LibraryItem {
-    private int editionID;
+public class Magazine extends LibraryItem implements ISearchable {
 
-    @Override
+    private int issueNumber;
+
+    public Magazine(String id, String title, String author, int year, int issueNumber) {
+        super(id, title, author, year);
+        this.issueNumber = issueNumber;
+    }
+
+    public int getIssueNumber() {
+        return issueNumber;
+    }
+
+    public void setIssueNumber(int issueNumber) {
+        this.issueNumber = issueNumber;
+    }
+
     public String getType() {
         return "Magazine";
     }
 
-    @Override
     public String toFileString() {
-        return "year=" + this.getYear() +
-                ", id=" + this.getId() +
-                ", author='" + this.getAuthor() + '\'' +
-                ", title='" + this.getTitle() + '\'' +
-                ", editionID='" + this.editionID + '\'';
+        return String.join(",", getType(), getId(), getTitle(), getAuthor(), String.valueOf(getYear()), String.valueOf(issueNumber));
     }
 
+    public void printDetails() {
+        super.printDetails();
+        System.out.println("Issue Number: " + issueNumber);
+    }
 
+    public boolean matches(String keyword) {
+        String details = getBaseSearchableDetails() + " " + issueNumber;
+        return details.toLowerCase().contains(keyword.toLowerCase());
+    }
 }
